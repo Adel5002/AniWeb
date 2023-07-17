@@ -2,20 +2,25 @@ from django.shortcuts import render
 import requests
 
 def index(request):
-    api_url = 'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&types=anime-serial'
+    api_url = 'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true'
     response = requests.get(api_url)
     data = response.json()
 
+    data_list = []
 
-    titles = [item.get('title') for item in data['results'] if 'title' in item]
-    screenshots = [item.get('screenshots') for item in data['results'] if 'screenshots' in item]
+    unique_titles = set()
 
-    data_list = [{'title': title, 'screenshot': screenshot} for title, screenshot in zip(titles, screenshots)]
+    for item in data['results']:
+        title = item.get('title')
+        poster_url = item['material_data']['poster_url']
 
+        # Проверяем, не было ли уже такого заголовка в списке
+        if title not in unique_titles:
+            data_list.append({'title': title, 'poster_url': poster_url})
+            unique_titles.add(title)  # Добавляем заголовок во множество
 
     context = {
         'data': data_list,
     }
-
 
     return render(request, 'index.html', context)

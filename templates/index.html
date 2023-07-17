@@ -1,19 +1,16 @@
-{% load static %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <ul>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
         {% for elem in data %}
-            <li>{{elem.title}}</li>
-            <img src="{{ elem.poster_url }}">
+        <div class="col">
+            <div class="main-info">
+                <p>{{elem.title}}</p>
+                <img class="anime-list" src="{{ elem.poster_url }}">
+            </div>
+        </div>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}

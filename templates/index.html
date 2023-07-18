@@ -1,5 +1,19 @@
 {% extends 'base.html' %}
 
+{% block header %}
+<form class="mx-auto" method="GET" action="{% url 'search' %}">
+    <input type="text" name="search_query">
+    <button type="submit" class="btn btn-primary">search</button>
+</form>
+
+{% for result in results %}
+    <div class="main-info">
+        <p>{{result.title}}</p>
+        <img class="anime-list" src="{{ result.poster_url }}">
+    </div>
+{% endfor %}
+{% endblock %}
+
 {% block content %}
 <main class="px-3 max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
    <div class="grid lg:grid-cols-5 sm:grid-cols-4 grid-cols-2 gap-8 m-5 mt-2 sm:max-w-max m-auto justify-between">

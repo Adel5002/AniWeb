@@ -24,3 +24,30 @@ def index(request):
     }
 
     return render(request, 'index.html', context)
+
+
+def search(request):
+    if 'search_query' in request.GET:
+        search_query = request.GET['search_query']
+        api_url = f'https://kodikapi.com/search?token=56a40dfa2b3c22e9f8252a8d6cc78b54&types=anime&with_material_data=true&title={search_query}'
+        response = requests.get(api_url)
+        data = response.json()
+
+        data_list = []
+
+        unique_titles = set()
+
+        for item in data['results']:
+            title = item.get('title')
+            poster_url = item['material_data']['poster_url']
+
+            # Проверяем, не было ли уже такого заголовка в списке
+            if title not in unique_titles:
+                data_list.append({'title': title, 'poster_url': poster_url})
+                unique_titles.add(title)  # Добавляем заголовок во множество
+        context = {
+            'results': data_list,
+        }
+
+        return render(request, 'index.html', context)
+    return render(request, 'index.html')

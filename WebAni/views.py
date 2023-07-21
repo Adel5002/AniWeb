@@ -46,7 +46,7 @@ def search(request):
                 data_list.append({'title': title, 'poster_url': poster_url})
                 unique_titles.add(title)  # Добавляем заголовок во множество
         context = {
-            'results': data_list,
+            'data': data_list,
         }
 
         return render(request, 'index.html', context)

@@ -7,14 +7,14 @@
 
 
  <div class="p-4 sm:ml-64">
-    <div class="p-4">
-       <div class="grid grid-cols-2 md:grid-cols-4 sm:grid-cols-3 gap-4 mb-4">
+    <div class="">
+       <div class="grid grid-cols-1 mt-16 md:grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         {% for elem in data %}
-        <div class=" m-2 w-full h-max bg-white border border-gray-200 rounded-lg hover:border-gray-100 hover:bg-white-300 hover:shadow-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <img class="w-full rounded-lg xl:h-56 lg:h-56 h-36 sm:h-48" src="{{ elem.poster_url }}">
+        <div class="flex m-2 w-full h-max bg-white border border-gray-200 rounded-lg hover:border-gray-100 hover:bg-white-300 hover:shadow-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <img class="rounded-lg w-24 sm:w-40 xl:h-60 lg:h-60 h-36 sm:h-48" src="{{ elem.poster_url }}">
             <div class="p-1">    
                 <p class="text-xs sm:text-lg w-full font-semibold">{{elem.title}}</p>
-                <p class="text-xs sm:text-lg w-full font-medium">Описание аниме</p>
+                <p class="text-xs sm:text-lg w-full font-medium">{{elem.description}}</p>
             </div>
         </div>
         {% endfor %}

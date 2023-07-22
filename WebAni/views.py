@@ -13,10 +13,10 @@ def index(request):
     for item in data['results']:
         title = item.get('title')
         poster_url = item['material_data']['poster_url']
-
+        description = item['material_data'].get('description')
         # Проверяем, не было ли уже такого заголовка в списке
         if title not in unique_titles:
-            data_list.append({'title': title, 'poster_url': poster_url})
+            data_list.append({'title': title, 'poster_url': poster_url, 'description': description})
             unique_titles.add(title)  # Добавляем заголовок во множество
 
     context = {
@@ -40,10 +40,11 @@ def search(request):
         for item in data['results']:
             title = item.get('title')
             poster_url = item['material_data']['poster_url']
-
+            description = item['material_data']['description']
+            
             # Проверяем, не было ли уже такого заголовка в списке
             if title not in unique_titles:
-                data_list.append({'title': title, 'poster_url': poster_url})
+                data_list.append({'title': title, 'poster_url': poster_url, 'description': description})
                 unique_titles.add(title)  # Добавляем заголовок во множество
         context = {
             'data': data_list,

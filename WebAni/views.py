@@ -14,9 +14,12 @@ def index(request):
         title = item.get('title')
         poster_url = item['material_data']['poster_url']
         description = item['material_data'].get('description')
+        genres = item['material_data'].get('genres')
+        year = item.get('year')
+        title_orig = item.get('title_orig')
         # Проверяем, не было ли уже такого заголовка в списке
         if title not in unique_titles:
-            data_list.append({'title': title, 'poster_url': poster_url, 'description': description})
+            data_list.append({'title': title, 'poster_url': poster_url, 'description': description, 'year': year, 'title_orig': title_orig, 'genres': genres})
             unique_titles.add(title)  # Добавляем заголовок во множество
 
     context = {
@@ -40,11 +43,13 @@ def search(request):
         for item in data['results']:
             title = item.get('title')
             poster_url = item['material_data']['poster_url']
-            description = item['material_data']['description']
-            
+            description = item['material_data'].get('description')
+            year = item.get('year')
+            title_orig = item.get('title_orig')
+            genres = item['material_data'].get('genres')
             # Проверяем, не было ли уже такого заголовка в списке
             if title not in unique_titles:
-                data_list.append({'title': title, 'poster_url': poster_url, 'description': description})
+                data_list.append({'title': title, 'poster_url': poster_url, 'description': description, 'year': year, 'title_orig': title_orig, 'genres': genres})
                 unique_titles.add(title)  # Добавляем заголовок во множество
         context = {
             'data': data_list,

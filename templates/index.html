@@ -17,7 +17,11 @@
                 <p class="text-sm sm:text-sm w-full font-semibold">
                     <span class=" rounded-lg text-white bg-emerald-4s00 font-normal">{{elem.genres}}</span>
                 </p>
+                {% if elem.description is None %}
+                <p class="text-sm sm:text-lg w-full font-medium">Нет описания</p>
+                {% else %}
                 <p class="text-sm sm:text-lg w-full font-medium">{{elem.description|truncatechars:150}}</p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

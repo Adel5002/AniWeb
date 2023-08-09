@@ -1,6 +1,52 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 import requests
+from django.core.paginator import Paginator
+
+
+# class AnimeListView(ListView):
+#     model = None
+#     template_name = 'index.html'
+#     context_object_name = 'data'
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#
+#         api_url = 'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true'
+#         response = requests.get(api_url)
+#         data = response.json()
+#
+#         context['prev'] = f'{data["prev_page"]}&limit=100&types=anime&with_material_data=true'
+#         context['next'] = f'{data["next_page"]}&limit=100&types=anime&with_material_data=true'
+#         return context
+#
+#
+#
+#     def get_queryset(self):
+#         api_url = 'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true'
+#         response = requests.get(api_url)
+#         data = response.json()
+#
+#
+#         data_list = []
+#
+#         unique_titles = set()
+#
+#
+#         for item in data['results']:
+#             title = item.get('title')
+#             poster_url = item['material_data']['poster_url']
+#             description = item['material_data'].get('description')
+#             genres = item['material_data'].get('genres')
+#             year = item.get('year')
+#             title_orig = item.get('title_orig')
+#             # Проверяем, не было ли уже такого заголовка в списке
+#             if title not in unique_titles:
+#                 data_list.append({'title': title, 'poster_url': poster_url, 'description': description, 'year': year,
+#                                   'title_orig': title_orig, 'genres': genres})
+#                 unique_titles.add(title)  # Добавляем заголовок во множество
+#
+#         return data_list
 
 
 class AnimeListView(ListView):
@@ -8,28 +54,60 @@ class AnimeListView(ListView):
     template_name = 'index.html'
     context_object_name = 'data'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        page = self.request.GET.get('page')
+        if page:
+            api_url = f'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true&page={page}'
+        else:
+            api_url = f'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true&page_url={page}'
+
+
+
+        response = requests.get(api_url)
+        data = response.json()
+        context['next_page'] = data.get('next_page')
+        context['prev_page'] = data.get('prev_page')
+        context['current_page'] = api_url
+
+
+        return context
+
     def get_queryset(self):
-        api_url = 'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true'
+
+        page = self.request.GET.get('page')
+        if page:
+            api_url = f'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true&page={page}'
+        else:
+            api_url = 'https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true'
+
         response = requests.get(api_url)
         data = response.json()
 
         data_list = []
-
         unique_titles = set()
 
         for item in data['results']:
             title = item.get('title')
-            poster_url = item['material_data']['poster_url']
-            description = item['material_data'].get('description')
-            genres = item['material_data'].get('genres')
+            if 'material_data' in item:
+                poster_url = item['material_data']['poster_url']
+                description = item['material_data'].get('description')
+                genres = item['material_data'].get('genres')
+            else:
+                poster_url = None
+                description = None
+                genres = None
+
             year = item.get('year')
             title_orig = item.get('title_orig')
-            # Проверяем, не было ли уже такого заголовка в списке
             if title not in unique_titles:
                 data_list.append({'title': title, 'poster_url': poster_url, 'description': description, 'year': year,
                                   'title_orig': title_orig, 'genres': genres})
-                unique_titles.add(title)  # Добавляем заголовок во множество
+                unique_titles.add(title)
+
         return data_list
+
 
 
 class SearchView(ListView):
@@ -38,7 +116,6 @@ class SearchView(ListView):
     context_object_name = 'data'
 
     def get_queryset(self):
-        search_query = self.request.GET.get('search_query')
         search_query = self.request.GET['search_query']
         api_url = f'https://kodikapi.com/search?token=56a40dfa2b3c22e9f8252a8d6cc78b54&types=anime&with_material_data=true&title={search_query}'
         response = requests.get(api_url)

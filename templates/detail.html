@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Аниме {{title}} {% endblock %}
+
+{% block content %}
+ <div class="p-4 sm:ml-64">
+    <div class="">
+       <div class="grid grid-cols-1 mt-16 md:grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div class="flex m-2 w-full h-max bg-white border border-gray-200 rounded-lg hover:border-gray-100 hover:bg-white-300 hover:shadow-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <img class="rounded-lg max-w-24 w-24 sm:w-40 xl:h-60 lg:h-60 h-36 sm:h-48" src="{{ poster_url }}">
+                <div class="p-1">    
+                    <p class="text-sm sm:text-lg w-full font-semibold">{{title}} <span class=" font-normal">/ {{title_orig|truncatechars:70}}</span></p>
+                    <p class="text-sm sm:text-sm w-full font-semibold">
+                        {% for genre in genres %}
+                          <span class="p-1 mr-1 rounded-lg text-white bg-emerald-400 font-normal">
+                              {{genre}}
+                          </span>
+                        {% endfor %}
+                    </p>
+                    {% if description is None %}
+	                    <p class="text-sm sm:text-lg w-full font-medium">Нет описания</p>
+	                    {% else %}
+	                    <p class="text-sm sm:text-lg w-full font-medium">{{description|truncatechars:150}}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+	</div>
+{% endblock %}

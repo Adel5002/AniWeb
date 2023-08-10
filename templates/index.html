@@ -10,25 +10,35 @@
     <div class="">
        <div class="grid grid-cols-1 mt-16 md:grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         {% for elem in data %}
-        <div class="flex m-2 w-full h-max bg-white border border-gray-200 rounded-lg hover:border-gray-100 hover:bg-white-300 hover:shadow-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <img class="rounded-lg max-w-24 w-24 sm:w-40 xl:h-60 lg:h-60 h-36 sm:h-48" src="{{ elem.poster_url }}">
-            <div class="p-1">    
-                <p class="text-sm sm:text-lg w-full font-semibold">{{elem.title}} <span class=" font-normal">/ {{elem.title_orig|truncatechars:70}}</span></p>
-                <p class="text-sm sm:text-sm w-full font-semibold">
-                    <span class=" rounded-lg text-white bg-emerald-4s00 font-normal">{{elem.genres}}</span>
-                </p>
-                {% if elem.description is None %}
-                <p class="text-sm sm:text-lg w-full font-medium">Нет описания</p>
-                {% else %}
-                <p class="text-sm sm:text-lg w-full font-medium">{{elem.description|truncatechars:150}}</p>
-                {% endif %}
+            <div class="flex m-2 w-full h-max bg-white border border-gray-200 rounded-lg hover:border-gray-100 hover:bg-white-300 hover:shadow-lg dark:text-slate-50 shadow dark:bg-gray-800 dark:border-gray-700">
+                <img class="rounded-lg max-w-24 w-24 sm:w-40 xl:h-60 lg:h-60 h-36 sm:h-48" src="{{ elem.poster_url }}">
+                <div class="p-1">    
+                    <a href="{% url 'detail' elem.ide %}">
+                        <p class="text-sm sm:text-lg w-full font-semibold">{{elem.title}} <span class=" font-normal">/ {{elem.title_orig|truncatechars:70}}</span></p>
+                    </a>
+                    <p class="text-sm sm:text-sm w-full font-semibold">
+                        {% for genre in elem.genres %}
+                          <span class="p-[2px] mr-1 rounded-lg text-white bg-emerald-600 dark:hover:shadow-[1_7px_8px_-4px_rgba(5,150,105),1_4px_8px_1_rgba(5,150,105)] ">
+                              {{genre}}
+                          </span>
+                        {% endfor %}
+                    </p>
+                    {% if elem.description is None %}
+                    <p class="text-sm sm:text-lg w-full font-medium">Нет описания</p>
+                    {% else %}
+                    <p class="text-sm sm:text-lg w-full font-medium">{{elem.description|truncatechars:150}}</p>
+                    {% endif %}
+                </div>
             </div>
-        </div>
         {% endfor %}
                   <a href="?page_url={{ prev_page }}">Предыдущая страница</a>
                   <a href="?page_url={{ next_page }}">Следующая страница</a>
        </div>
-    </div>
- </div>
+        <div class="mx-auto items-center flex justify-center ">
+            <a class="p-2 mr-2 inline-block rounded-lg bg-emerald-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] transition duration-150 ease-in-out hover:bg-neutral-800 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-neutral-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:outline-none focus:ring-0 active:bg-neutral-900 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] dark:bg-emerald-600 dark:shadow-[0_4px_9px_-4px_#030202] dark:hover:bg-emerald-500 dark:hover:shadow-[0_8px_9px_-4px_rgba(5,150,105),0_4px_18px_0_rgba(5,150,105)] dark:focus:bg-emerald-400 dark:focus:shadow-[0_8px_9px_-4px_rgba(5,150,105),0_4px_18px_0_rgba(5,150,105)] dark:active:bg-emerald-600 dark:active:shadow-[0_8px_9px_-4px_rgba(5,150,105),0_4px_18px_0_rgba(5,150,105)]" href="?page_url={{ prev_page }}">Назад</a>
+
+            <a class="p-2 ml-2 inline-block rounded-lg bg-emerald-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] transition duration-150 ease-in-out hover:bg-neutral-800 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-neutral-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:outline-none focus:ring-0 active:bg-neutral-900 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] dark:bg-emerald-600 dark:shadow-[0_4px_9px_-4px_#030202] dark:hover:bg-emerald-500 dark:hover:shadow-[0_8px_9px_-4px_rgba(5,150,105),0_4px_18px_0_rgba(5,150,105)] dark:focus:bg-emerald-400 dark:focus:shadow-[0_8px_9px_-4px_rgba(5,150,105),0_4px_18px_0_rgba(5,150,105)] dark:active:bg-emerald-600 dark:active:shadow-[0_8px_9px_-4px_rgba(5,150,105),0_4px_18px_0_rgba(5,150,105)]" href="?page_url={{ prev_page }}" href="?page_url={{ next_page }}">Вперед</a>
+        </div>
+</div>
 
 {% endblock %}

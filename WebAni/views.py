@@ -10,42 +10,70 @@ def AnimeDetail(request, ide):
     response = requests.get(url)
     data = response.json()
 
-    context = {
-        'title': 'Нет данных',
-        'poster_url': None,
-        'description': None,
-        'year': None,
-        'title_orig': None,
-        'genres': None
-    }
+    data_list = {}
+    unique_titles = set()
+
+    print(ide)
 
     for item in data['results']:
         if item['id'] == ide:
             title = item.get('title')
-            if 'material_data' in item:
-                poster_url = item['material_data']['poster_url']
-                description = item['material_data'].get('description')
-                ide = item['material_data'].get('id')
-                genres = item['material_data'].get('genres')
-            else:
-                poster_url = None
-                description = None
-                genres = None
-
+            poster_url = item['material_data']['poster_url']
+            description = item['material_data'].get('description')
+            genres = item['material_data'].get('genres')
             year = item.get('year')
             title_orig = item.get('title_orig')
+            print(title)
+            print(ide)
+            if title not in unique_titles:
+                data_list.update({'title': title, 'poster_url': poster_url, 'description': description, 'year': year,
 
-            context = {
-                'title': title,
-                'poster_url': poster_url,
-                'description': description,
-                'year': year,
-                'title_orig': title_orig,
-                'genres': genres
-            }
-            break
+                                  'title_orig': title_orig, 'genres': genres})
+                unique_titles.add(title)
+            print(ide)
 
-    return render(request, 'detail.html', context)
+    return render(request, 'detail.html', data_list)
+
+
+# class AnimeDetail(DetailView):
+#     model = None  # Замените на вашу модель
+#     template_name = 'detail.html'
+#
+#     def get(self, request, ide):
+#         url = "https://kodikapi.com/list?token=56a40dfa2b3c22e9f8252a8d6cc78b54&limit=100&types=anime&with_material_data=true"
+#         response = requests.get(url)
+#         data = response.json()
+#
+#         for item in data['results']:
+#             if item['id'] == ide:
+#                 title = item.get('title')
+#                 if 'material_data' in item:
+#                     poster_url = item['material_data']['poster_url']
+#                     description = item['material_data'].get('description')
+#                     ide = item['material_data'].get('id')
+#                     genres = item['material_data'].get('genres')
+#                 else:
+#                     poster_url = None
+#                     description = None
+#                     genres = None
+#                     ide = None
+#
+#
+#
+#                 year = item.get('year')
+#                 title_orig = item.get('title_orig')
+#
+#                 context = {
+#                     'title': title,
+#                     'poster_url': poster_url,
+#                     'description': description,
+#                     'year': year,
+#                     'ide': ide,
+#                     'title_orig': title_orig,
+#                     'genres': genres
+#                 }
+#
+#                 return render(request, self.template_name, context)
 
 
 class AnimeListView(ListView):
@@ -104,8 +132,6 @@ class AnimeListView(ListView):
             if title not in unique_titles:
                 data_list.append({'title': title, 'poster_url': poster_url, 'description': description, 'year': year,
 
-                                  'title_orig': title_orig, 'genres': genres})
-
                                   'title_orig': title_orig, 'genres': genres, 'ide': ide})
                 unique_titles.add(title)
 
@@ -129,6 +155,7 @@ class SearchView(ListView):
         unique_titles = set()
 
         for item in data['results']:
+            ide = item.get('id')
             title = item.get('title')
             poster_url = item['material_data']['poster_url']
             description = item['material_data'].get('description')
@@ -137,6 +164,6 @@ class SearchView(ListView):
             genres = item['material_data'].get('genres')
                     # Проверяем, не было ли уже такого заголовка в списке
             if title not in unique_titles:
-                data_list.append({'title': title, 'poster_url': poster_url, 'description': description, 'year': year, 'title_orig': title_orig, 'genres': genres})
+                data_list.append({'title': title, 'poster_url': poster_url, 'description': description, 'year': year, 'title_orig': title_orig, 'genres': genres, 'ide': ide})
                 unique_titles.add(title)  # Добавляем заголовок во множество
         return data_list

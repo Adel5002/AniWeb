@@ -6,7 +6,7 @@ from .views import AnimeListView, SearchView, AnimeDetail
 urlpatterns = [
     path('', AnimeListView.as_view(), name='home'),
     path('search/', SearchView.as_view(), name='search'),
-    path('anime/<slug:ide>/', AnimeDetail, name='detail'),
+    path('anime/<slug:ide>/', AnimeDetail.as_view(), name='detail'),
 ]
 
 urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

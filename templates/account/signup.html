@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% load static %}
+
+{% load socialaccount %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+<div style="padding-top: 100px; width: 350px; margin:0 auto;">
+
+<form class="signup bg-slate-950 rounded-t-lg shadow-md px-8 pt-6 pb-4" id="signup_form" method="post" action="{% url 'account_signup' %}">
+  {% csrf_token %}
+  <div style="margin-bottom: 10px;">
+    <label style="color: white;" for="{{ form.username.label }}">{{ form.username.label }}</label>
+    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ form.username.field.widget.attrs.placeholder }}" type="text" name="{{form.username.name}}">
+  </div>
+  <div style="margin-bottom: 10px;">
+    <label style="color: white;" for="{{ form.email.label }}">{{ form.email.label }}</label>
+    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ form.email.field.widget.attrs.placeholder }}" type="email" name="{{form.email.name}}">
+  </div>
+  <div style="margin-bottom: 10px;">
+    <label style="color: white;" for="{{ form.password1.label }}">{{ form.password1.label }}</label>
+    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ form.password1.field.widget.attrs.placeholder }}" type="password" name="{{form.password1.name}}">
+  </div>
+  <div style="margin-bottom: 30px;">
+    <label style="color: white;" for="{{ form.password2.label }}">{{ form.password2.label }}</label>
+    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ form.password2.field.widget.attrs.placeholder }}" type="password" name="{{form.password2.name}}">
+  </div>
+  {% if redirect_field_value %}
+  <input  type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <button style="margin-bottom: 10px;" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" type="submit">{% trans "Sign Up" %} &raquo;</button>
+
+</form>
+<form class="bg-slate-950 shadow-md px-8" method="post" action="{% provider_login_url 'yandex' process='login' %}">
+   {% csrf_token %}
+   <button type="submit" class="fa-brands fa-yandex bg-red-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" title="Login using Goggle account"></button>
+</form>
+<form class="bg-slate-950 rounded-b-lg shadow-md px-8 pt-3 pb-8 mb-4" method="post" action="{% provider_login_url 'google' process='login' %}">
+   {% csrf_token %}
+   <button type="submit" class="fa-brands fa-google bg-cyan-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" title="Login using Goggle account"></button>
+    <p class="text-white pt-5">{% blocktrans %}Already have an account? Then please <a class="text-cyan-500" href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+</form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+<div style="width: 350px; margin:0 auto; padding-top: 200px;" >
+
+
+<form class="login bg-slate-950 rounded-t-lg shadow-md px-8 pt-6 pb-4" id="signup_form" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  <div style="margin-bottom: 10px;">
+    <label style="color: white;" for="{{ form.login.label }}">{{ form.login.label }}</label>
+    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ form.login.field.widget.attrs.placeholder }}" name="{{ form.login.name }}" type="text">
+  </div>
+  <div style="margin-bottom: 10px;">
+    <label style="color: white;" for="{{ form.password.label }}">{{ form.password.label }}</label>
+    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ form.password.field.widget.attrs.placeholder }}" name="{{ form.password.name }}" type="password">
+  </div>
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <div style="margin-bottom: 30px;"><a class="button secondaryAction" style="color: white;" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a></div>
+  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" type="submit">{% trans "Sign In" %}</button>
+</form>
+<form class="bg-slate-950 shadow-md pt-3 px-8" method="post" action="{% provider_login_url 'yandex' process='login' %}">
+   {% csrf_token %}
+   <button type="submit" class="fa-brands fa-yandex bg-red-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" title="Login using Goggle account"></button>
+</form>
+<form class="bg-slate-950 rounded-b-lg shadow-md px-8 pt-3 pb-8 mb-4" method="post" action="{% provider_login_url 'google' process='login' %}">
+   {% csrf_token %}
+   <button type="submit" class="fa-brands fa-google bg-cyan-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" title="Login using Goggle account"></button>
+  <p class="pt-5" style="color: white;">{% blocktrans %}Don't have account?
+  <a class="text-cyan-500" href="{{ signup_url }}">sign up</a>{% endblocktrans %}</p>
+</form>
+</div>
+
+{% endblock %}

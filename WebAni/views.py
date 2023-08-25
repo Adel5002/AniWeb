@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 import requests
-from django.core.paginator import Paginator
-from django.http import QueryDict
+
 
 
 

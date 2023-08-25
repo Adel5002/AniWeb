@@ -1,5 +1,5 @@
 {% load static %}
-{% load socialaccount %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,6 +8,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
     <script>
@@ -52,8 +55,19 @@
           </svg>
           <span class="sr-only">Search</span>
         </button>
-<!--          <a href="{% provider_login_url 'yandex' method='oauth2' %}">Войти через Yandex</a>-->
-          <ul>{% include "socialaccount/snippets/provider_list.html" with process="login" %}</ul>
+          {% if user.is_authenticated %}
+          <p class="pl-3 text-lg">{{ user.username }} | </p>
+          <form method="post" action="{% url 'account_logout' %}">
+              {% csrf_token %}
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+              {% endif %}
+              <button class="text-base" type="submit">Sign Out</button>
+              {% else %}
+               <a class="pl-3 text-lg" href="{% url 'account_login' %}">Login |</a>
+              <a class="pl-1 text-lg" href="{% url 'account_signup' %}">Signup</a>
+            </form>
+          {% endif %}
         <div class="absolute hidden md:block right-2">
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
